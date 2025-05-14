@@ -16,9 +16,11 @@ const DeleteUserBtn = (props: DeleteUserBtnProps) => {
     const response = await deleteUserAction(props.user.id)
 
     if (!response.success) {
-      toast("Error ao deletar usuário", {
+      toast.error("Error ao deletar usuário", {
         description: response.message
       })
+    } else {
+      toast.success("Colaborador deletado com sucesso")
     }
   }
 

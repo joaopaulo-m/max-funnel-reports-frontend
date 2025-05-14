@@ -1,0 +1,27 @@
+import { EditReportsForm } from "./edit-reports-form";
+import { fetchCompanyAction } from "@/actions/company/fetch";
+
+const ReportsSettingsCard = async () => {
+  const { company } = await fetchCompanyAction()
+
+  return ( 
+    <div className="w-full h-fit flex justify-between items-center">
+        <div className="w-fit h-fit flex flex-col gap-5">
+          <h3 className="text-sm font-bold">Configurações de relatórios:</h3>
+          <div className="w-fit h-fit flex flex-col gap-2">
+            <div className="w-fit h-fit flex items-center gap-1">
+              <span className="text-sm">Dia do mês para envio:</span>
+              <span className="text-sm font-semibold">{company?.report_day_of_month}</span>
+            </div>
+            <div className="w-fit h-fit flex items-center gap-1">
+              <span className="text-sm">Dados de:</span>
+              <span className="text-sm font-semibold">{company?.report_days_offset} atrás</span>
+            </div>
+          </div>
+        </div>
+        <EditReportsForm company={company} />
+      </div>
+  );
+}
+
+export default ReportsSettingsCard;

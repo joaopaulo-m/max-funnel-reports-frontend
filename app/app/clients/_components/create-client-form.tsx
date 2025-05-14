@@ -2,8 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { UserPlus } from "lucide-react";
+import { LoaderCircle, UserPlus } from "lucide-react";
 import { toast } from "sonner";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ import { createClientSchema, type CreateClientSchemaType } from "@/schemas/forms
 import { createClientAction } from "@/actions/client/create";
 
 const CreateClientForm = () => {
+  const [open, setOpen] = useState(false)
   const form = useForm<CreateClientSchemaType>({
     resolver: zodResolver(createClientSchema),
     defaultValues: {
@@ -23,6 +25,7 @@ const CreateClientForm = () => {
       meta_account_id: ""
     }
   })
+  const { formState: { isSubmitting } } = form;
   
   async function onSubmit(data: CreateClientSchemaType) {
     const response = await createClientAction(data)
@@ -31,13 +34,16 @@ const CreateClientForm = () => {
       toast("Error ao criar cliente", {
         description: response.message
       })
+    } else {
+      toast.success("Cliente criado com sucesso")
+      setOpen(false)
     }
 
     form.reset()
   }
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button className="w-fit h-12 !px-6">
           <UserPlus width={16} height={16} color="#fff" />
@@ -111,7 +117,21 @@ const CreateClientForm = () => {
               />
             </div>
             <SheetFooter className="px-0">
-              <Button className="h-12 mt-4" type="submit">Criar novo Cliente</Button>
+              <Button 
+                  className="h-12 mt-4" 
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <div className="w-fit h-fit flex items-center gap-2">
+                      <LoaderCircle className="animate-spin size-3" />
+                      <span className="text-sm font-semibold text-white">Enviando</span>
+                    </div>
+                    ) : (
+                      "Criar novo cliente"
+                    )
+                  }
+                </Button>
             </SheetFooter>
           </form>
         </Form>

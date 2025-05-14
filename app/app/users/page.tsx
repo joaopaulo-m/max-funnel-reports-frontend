@@ -1,9 +1,6 @@
-import { Suspense } from "react"
-
 import { fetchUsersAction } from "@/actions/user/fetch"
 import { refreshUserAction } from "@/actions/user/refresh"
 import { UsersTable } from "./_components/users-table"
-import { TableSkeleton } from "../_components/table-skeleton"
 
 const UsersPage = async () => {
   const refreshUserResult = await refreshUserAction()
@@ -15,9 +12,7 @@ const UsersPage = async () => {
   const users = await fetchUsersAction(refreshUserResult.user.company_id)
 
   return (
-    <Suspense fallback={<TableSkeleton />}>
-      <UsersTable users={users} />
-    </Suspense>
+    <UsersTable users={users} />
   )
 }
 

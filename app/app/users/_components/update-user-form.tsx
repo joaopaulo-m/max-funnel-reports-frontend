@@ -2,12 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { UserPen } from "lucide-react";
+import { LoaderCircle, UserPen } from "lucide-react";
 import { toast } from "sonner";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ interface UpdateUserFormProps {
 }
 
 const UpdateUserForm = (props: UpdateUserFormProps) => {
+  const [open, setOpen] = useState(false)
   const form = useForm<UpdateUserSchemaType>({
     resolver: zodResolver(updateUserSchema),
     defaultValues: {
@@ -30,6 +31,7 @@ const UpdateUserForm = (props: UpdateUserFormProps) => {
       permission_type: props.user.permission_type,
     }
   })
+  const { formState: { isSubmitting } } = form;
 
   async function onSubmit(data: UpdateUserSchemaType) {
     const response = await updateUserAction({
@@ -42,6 +44,11 @@ const UpdateUserForm = (props: UpdateUserFormProps) => {
       toast.error("Error ao atualizar usuário", {
         description: response.message
       })
+    } else {
+      toast.success("Colaborador atualizado com sucesso", {
+        description: "Dados atualizados com sucesso no sistema."
+      })
+      setOpen(false)
     }
 
     form.reset()
@@ -56,7 +63,7 @@ const UpdateUserForm = (props: UpdateUserFormProps) => {
   }, [props.user, form]);  
   
   return ( 
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="w-fit flex justify-start cursor-pointer" asChild>
         <button className="w-fit flex items-center gap-1 text-zinc-800 cursor-pointer">
           <UserPen width={16} height={16} color="#27272a" />
@@ -125,9 +132,21 @@ const UpdateUserForm = (props: UpdateUserFormProps) => {
               />
             </div>
             <DialogFooter>
-              <DialogClose asChild>
-                <Button type="submit">Atualizar colaborador</Button>
-              </DialogClose>
+              <Button 
+                className="h-12 mt-4" 
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <div className="w-fit h-fit flex items-center gap-2">
+                    <LoaderCircle className="animate-spin size-3" />
+                    <span className="text-sm font-semibold text-white">Enviando</span>
+                  </div>
+                  ) : (
+                    "Atualizar colaborador"
+                  )
+                }
+              </Button>
             </DialogFooter>
           </form>
         </Form>

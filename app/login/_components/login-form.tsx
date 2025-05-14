@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -25,7 +26,8 @@ const LoginForm = () => {
       password_not_defined: false
     }
   })
-  
+  const { formState: { isSubmitting } } = form;
+
   async function onSubmit(data: LoginSchemaType) {
     const response = await loginAction(data)
 
@@ -96,8 +98,20 @@ const LoginForm = () => {
             )}
           />
           <div className="w-full h-fit flex flex-col gap-4 mt-3">
-            <Button className="h-16" type="submit">
-              Entrar na minha conta
+            <Button 
+              className="h-16" 
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <div className="w-fit h-fit flex items-center gap-2">
+                  <LoaderCircle className="animate-spin size-3" />
+                  <span className="text-sm font-semibold text-white">Enviando</span>
+                </div>
+                ) : (
+                  "Entrar na minha conta"
+                )
+              }
             </Button>
           </div>
         </form>

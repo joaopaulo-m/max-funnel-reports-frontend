@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,7 @@ const CreateNewPasswordForm = () => {
       confirm_password: ""
     }
   })
+  const { formState: { isSubmitting } } = form;
   
   async function onSubmit(data: CreateNewPasswordSchemaType) {
     const response = await createNewPasswordAction(data)
@@ -97,8 +99,20 @@ const CreateNewPasswordForm = () => {
           )}
         />
         <div className="w-full h-fit flex flex-col gap-4 mt-3">
-          <Button className="h-16" type="submit">
-            Criar nova senha
+          <Button 
+            className="h-16" 
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <div className="w-fit h-fit flex items-center gap-2">
+                <LoaderCircle className="animate-spin size-3" />
+                <span className="text-sm font-semibold text-white">Enviando</span>
+              </div>
+              ) : (
+                "Criar nova senha"
+              )
+            }
           </Button>
         </div>
       </form>

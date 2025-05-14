@@ -3,10 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { LoaderCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
@@ -14,31 +15,38 @@ import type { Company } from "@/types/company";
 import { updateCompanySchema, type UpdateCompanySchemaType } from "@/schemas/forms/update-company";
 import { updateCompanyAction } from "@/actions/company/update";
 
-interface EditReportsForm {
-  company: Company
+interface EditReportsFromProps {
+  company?: Company
 }
 
-const EditReportsForm = (props: EditReportsForm) => {
+const EditReportsForm = (props: EditReportsFromProps) => {
+  const { company } = props;
+
+  const [open, setOpen] = useState(false)
   const form = useForm<UpdateCompanySchemaType>({
     resolver: zodResolver(updateCompanySchema),
     defaultValues: {
-      meta_account_id: props.company.meta_account_id,
-      meta_token: props.company.meta_token,
-      report_day_of_month: String(props.company.report_day_of_month),
-      report_days_offset: String(props.company.report_days_offset),
+      meta_account_id: company?.meta_account_id,
+      meta_token: company?.meta_token,
+      report_day_of_month: company?.report_day_of_month ? String(company?.report_day_of_month) : "",
+      report_days_offset: company?.report_days_offset ? String(company?.report_days_offset) : "",
     }
   })
+  const { formState: { isSubmitting } } = form;
 
   async function onSubmit(data: UpdateCompanySchemaType) {
     const response = await updateCompanyAction({
       ...data,
-      company_id: props.company.id
+      company_id: company?.id || ""
     })
 
     if (!response.success) {
       toast.error("Error ao atualizar configurações", {
         description: response.message
       })
+    } else {
+      toast.success("Configurações atualizadas com sucesso")
+      setOpen(false)
     }
 
     form.reset()
@@ -46,15 +54,15 @@ const EditReportsForm = (props: EditReportsForm) => {
 
   useEffect(() => {
     form.reset({
-      meta_account_id: props.company.meta_account_id,
-      meta_token: props.company.meta_token,
-      report_day_of_month: String(props.company.report_day_of_month),
-      report_days_offset: String(props.company.report_days_offset),
+      meta_account_id: company?.meta_account_id,
+      meta_token: company?.meta_token,
+      report_day_of_month: company?.report_day_of_month ? String(company?.report_day_of_month) : "",
+      report_days_offset: company?.report_days_offset ? String(company?.report_days_offset) : "",
     })
-  }, [props.company, form])
+  }, [company, form])
 
   return ( 
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="w-fit flex justify-start cursor-pointer" asChild>
         <Button className="bg-foreground/25 hover:bg-foreground/20 text-black font-medium">
           Editar configurações
@@ -104,9 +112,21 @@ const EditReportsForm = (props: EditReportsForm) => {
               />
             </div>
             <DialogFooter>
-              <DialogClose asChild>
-                <Button type="submit">Atualizar configurações</Button>
-              </DialogClose>
+              <Button 
+                className="h-12 mt-4" 
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <div className="w-fit h-fit flex items-center gap-2">
+                    <LoaderCircle className="animate-spin size-3" />
+                    <span className="text-sm font-semibold text-white">Enviando</span>
+                  </div>
+                  ) : (
+                    "Atualizar configuraçõe"
+                  )
+                }
+              </Button>
             </DialogFooter>
           </form>
         </Form>

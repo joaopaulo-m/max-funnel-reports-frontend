@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { UserPlus } from "lucide-react";
+import { LoaderCircle, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 import { createUserSchema, type CreateUserSchemaType } from "@/schemas/forms/create-user";
 import { createUserAction } from "@/actions/user/create";
+import { useState } from "react";
 
 const CreateUserForm = () => {
+  const [open, setOpen] = useState(false)
   const form = useForm<CreateUserSchemaType>({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
@@ -23,21 +25,25 @@ const CreateUserForm = () => {
       permission_type: "manager"
     }
   })
+  const { formState: { isSubmitting } } = form;
   
   async function onSubmit(data: CreateUserSchemaType) {
     const response = await createUserAction(data)
 
     if (!response.success) {
-      toast("Error ao criar usuário", {
+      toast.error("Error ao criar usuário", {
         description: response.message
       })
+    } else {
+      toast.success("Colaborador criado com sucesso")
+      setOpen(false)
     }
 
     form.reset()
   }
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button className="w-fit h-12 !px-6">
           <UserPlus width={16} height={16} color="#fff" />
@@ -106,7 +112,21 @@ const CreateUserForm = () => {
               />
             </div>
             <SheetFooter className="px-0">
-              <Button className="h-12 mt-4" type="submit">Criar novo Colaborador</Button>
+              <Button 
+                className="h-12 mt-4" 
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <div className="w-fit h-fit flex items-center gap-2">
+                    <LoaderCircle className="animate-spin size-3" />
+                    <span className="text-sm font-semibold text-white">Enviando</span>
+                  </div>
+                  ) : (
+                    "Criar novo Colaborador"
+                  )
+                }
+              </Button>
             </SheetFooter>
           </form>
         </Form>
