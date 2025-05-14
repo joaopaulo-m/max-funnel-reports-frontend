@@ -43,7 +43,8 @@ export function ClientsTable({ clients }: ClientsTableProps) {
               <TableHead>NOME</TableHead>
               <TableHead>E-MAIL</TableHead>
               <TableHead>TELEFONE</TableHead>
-              <TableHead className="text-right">AÇÕES</TableHead>
+              <TableHead className="text-right">RELATÓRIOS</TableHead>
+              <TableHead className="block w-12">{''}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

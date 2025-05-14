@@ -7,6 +7,7 @@ export type Client = {
   email: string
   password: string
   phone: string
+  meta_account_id: string
   created_at: number
   reports_settings: ClientReportsSettings
 }

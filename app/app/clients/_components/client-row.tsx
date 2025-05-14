@@ -1,12 +1,18 @@
 'use client'
 
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { EllipsisVertical, Trash } from "lucide-react";
 
-import { updateClientReportsSettingsAction } from "@/actions/client-reports-settings/update";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { TableCell, TableRow } from "@/components/ui/table";
+
+import { updateClientReportsSettingsAction } from "@/actions/client-reports-settings/update";
 import type { Client } from "@/types/client";
+import { DeleteClientAlertDialog } from "./delete-client-alert-dialog";
+import { UpdateClientForm } from "./update-client-form";
 
 interface ClientRowProps {
   client: Client
@@ -14,6 +20,8 @@ interface ClientRowProps {
 
 const ClientRow = (props: ClientRowProps) => {
   const { client } = props;
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [updateDialogOpen, setUpdateDialogOpen]= useState(false)
   
   async function onCampaignsReportsClick() {
     const result = await updateClientReportsSettingsAction({
@@ -38,8 +46,14 @@ const ClientRow = (props: ClientRowProps) => {
       toast.error("Erro ao atualizar", {
         description: result.message
       })
+    } else {
+      toast.success("Configurações de relatórios atualizada")
     }
   }
+
+  useEffect(() => {
+    console.log(updateDialogOpen)
+  }, [updateDialogOpen])
 
   return ( 
     <TableRow key={client.id}>
@@ -64,6 +78,39 @@ const ClientRow = (props: ClientRowProps) => {
           <Label className="cursor-pointer" htmlFor={client.reports_settings.id + "-balance"}>Saldo</Label>
         </div>
       </TableCell>
+      <TableCell className="w-12">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="w-full h-full text-right cursor-pointer" asChild>
+            <EllipsisVertical className="!w-4 !h-4 color-foreground" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-32">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <button onClick={() => setUpdateDialogOpen(true)} className="w-full flex items-center cursor-pointer">
+                  <span className="text-xs text-foreground font-bold">Editar</span>
+                </button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <button onClick={() => setDeleteDialogOpen(true)} className="w-full flex items-center gap-1 text-red-400 cursor-pointer">
+                  <Trash width={12} height={12} color="#ff6467" />
+                  <span className="text-xs font-bold">Excluir</span>
+                </button>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </TableCell>
+      <DeleteClientAlertDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        clientId={client.id}
+        clientName={client.name}
+      />
+      <UpdateClientForm 
+        open={updateDialogOpen}
+        onOpenChange={setUpdateDialogOpen}
+        client={client}
+      />
     </TableRow>
   );
 }

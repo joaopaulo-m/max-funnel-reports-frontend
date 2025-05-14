@@ -31,7 +31,7 @@ const CreateClientForm = () => {
     const response = await createClientAction(data)
 
     if (!response.success) {
-      toast("Error ao criar cliente", {
+      toast.error("Error ao criar cliente", {
         description: response.message
       })
     } else {
