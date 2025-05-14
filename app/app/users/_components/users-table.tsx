@@ -28,7 +28,7 @@ export const UsersTable = ({ users }: UsersTableProps) => {
   }, [query, users])
 
   return (
-    <div className="w-[70%] h-full min-h-full max-h-full flex flex-col gap-8">
+    <div className="w-[75%] h-full min-h-full max-h-full flex flex-col gap-8">
       <div className="w-full h-fit flex flex-col items-center gap-8">
         <div className="w-full flex items-center gap-5">
           <Input

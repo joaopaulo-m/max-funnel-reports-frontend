@@ -6,7 +6,7 @@ const ClientsPage = async () => {
   const clients: Client[] = await fetchClientsAction()
 
   return ( 
-    <div className="w-[70%] h-full min-h-full max-h-full flex flex-col gap-8">
+    <div className="w-[80%] h-full min-h-full max-h-full flex flex-col gap-8">
       <div className="w-full h-fit flex flex-col items-center gap-8">
         <ClientsTable clients={clients} />
       </div>
