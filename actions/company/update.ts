@@ -18,7 +18,7 @@ export async function updateCompanyAction(data: UpdateCompanyProps) {
         meta_account_id: data.meta_account_id,
         meta_token: data.meta_token,
         report_day_of_month: Number(data.report_day_of_month),
-        report_days_offset: Number(data.report_days_offset)
+        report_lookback_limit: Number(data.report_lookback_limit)
       }
     })
 

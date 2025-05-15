@@ -11,10 +11,6 @@ const MetaSettingsCard = async () => {
         <div className="w-fit h-fit flex flex-col gap-5">
           <h3 className="text-sm font-bold">Dados META:</h3>
           <div className="w-fit h-fit flex flex-col gap-2">
-            <div className="w-fit h-fit flex items-center gap-1">
-              <span className="text-sm">Account ID:</span>
-              <span className="text-sm font-semibold">{company?.meta_account_id}</span>
-            </div>
             <div className="w-fit h-fit flex items-center gap-2">
               <span className="text-sm">Token:</span>
               <div className="w-fit h-fit flex items-center gap-3">

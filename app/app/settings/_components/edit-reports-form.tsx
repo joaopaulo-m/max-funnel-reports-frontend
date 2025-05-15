@@ -29,7 +29,7 @@ const EditReportsForm = (props: EditReportsFromProps) => {
       meta_account_id: company?.meta_account_id,
       meta_token: company?.meta_token,
       report_day_of_month: company?.report_day_of_month ? String(company?.report_day_of_month) : "",
-      report_days_offset: company?.report_days_offset ? String(company?.report_days_offset) : "",
+      report_lookback_limit: company?.report_lookback_limit ? String(company?.report_lookback_limit) : "",
     }
   })
   const { formState: { isSubmitting } } = form;
@@ -57,7 +57,7 @@ const EditReportsForm = (props: EditReportsFromProps) => {
       meta_account_id: company?.meta_account_id,
       meta_token: company?.meta_token,
       report_day_of_month: company?.report_day_of_month ? String(company?.report_day_of_month) : "",
-      report_days_offset: company?.report_days_offset ? String(company?.report_days_offset) : "",
+      report_lookback_limit: company?.report_lookback_limit ? String(company?.report_lookback_limit) : "",
     })
   }, [company, form])
 
@@ -96,16 +96,16 @@ const EditReportsForm = (props: EditReportsFromProps) => {
               />
               <FormField
                 control={form.control}
-                name="report_days_offset"
+                name="report_lookback_limit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Dias para coleta de dados para relatório:</FormLabel>
+                    <FormLabel>Máximo de dias para coleta de dados:</FormLabel>
                     <FormControl>
                       <Input {...field} type="number" />
                     </FormControl>
                     <FormMessage />
                     <FormDescription>
-                      Por exemplo: buscar dados de (15) dias atrás para envio do relatório
+                      Por exemplo: buscar dados de no máximo ({company?.report_lookback_limit || 15}) dias atrás para envio do relatório
                     </FormDescription>
                   </FormItem>
                 )}

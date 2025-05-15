@@ -29,7 +29,7 @@ const EditMetaFieldsForm = (props: EditMetaFieldsFormProps) => {
       meta_account_id: company?.meta_account_id,
       meta_token: company?.meta_token,
       report_day_of_month: company?.report_day_of_month ? String(company?.report_day_of_month) : "",
-      report_days_offset: company?.report_days_offset ? String(company?.report_days_offset) : "",
+      report_lookback_limit: company?.report_lookback_limit ? String(company?.report_lookback_limit) : "",
     }
   })
   const { formState: { isSubmitting } } = form;
@@ -57,7 +57,7 @@ const EditMetaFieldsForm = (props: EditMetaFieldsFormProps) => {
       meta_account_id: company?.meta_account_id,
       meta_token: company?.meta_token,
       report_day_of_month: company?.report_day_of_month ? String(company?.report_day_of_month) : "",
-      report_days_offset: company?.report_days_offset ? String(company?.report_days_offset) : "",
+      report_lookback_limit: company?.report_lookback_limit ? String(company?.report_lookback_limit) : "",
     })
   }, [company, form])
 
@@ -81,19 +81,6 @@ const EditMetaFieldsForm = (props: EditMetaFieldsFormProps) => {
               </DialogDescription>
             </DialogHeader>
             <div className="w-full h-fit flex flex-col gap-5">
-              <FormField
-                control={form.control}
-                name="meta_account_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Account ID:</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="meta_token"

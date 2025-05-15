@@ -5,6 +5,6 @@ export type Company = {
   meta_token: string;
   meta_account_id: string;
   report_day_of_month: number;
-  report_days_offset: number;
+  report_lookback_limit: number;
   created_at: number;
 }

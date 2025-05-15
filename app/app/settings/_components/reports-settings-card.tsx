@@ -14,8 +14,8 @@ const ReportsSettingsCard = async () => {
               <span className="text-sm font-semibold">{company?.report_day_of_month}</span>
             </div>
             <div className="w-fit h-fit flex items-center gap-1">
-              <span className="text-sm">Dados de:</span>
-              <span className="text-sm font-semibold">{company?.report_days_offset} atrás</span>
+              <span className="text-sm">Máximo de dias para coleta de dados:</span>
+              <span className="text-sm font-semibold">{company?.report_lookback_limit} atrás</span>
             </div>
           </div>
         </div>
