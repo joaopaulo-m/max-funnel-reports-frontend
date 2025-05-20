@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import type { Company } from "@/types/company";
 import { updateCompanySchema, type UpdateCompanySchemaType } from "@/schemas/forms/update-company";
 import { updateCompanyAction } from "@/actions/company/update";
+import { ReportMonthDayBadge } from "./report-month-day-badge";
+import { CreateReportMonthDayForm } from "./create-report-month-day-form";
 
 interface EditReportsFromProps {
   company?: Company
@@ -28,7 +30,6 @@ const EditReportsForm = (props: EditReportsFromProps) => {
     defaultValues: {
       meta_account_id: company?.meta_account_id,
       meta_token: company?.meta_token,
-      report_day_of_month: company?.report_day_of_month ? String(company?.report_day_of_month) : "",
       report_lookback_limit: company?.report_lookback_limit ? String(company?.report_lookback_limit) : "",
     }
   })
@@ -56,7 +57,6 @@ const EditReportsForm = (props: EditReportsFromProps) => {
     form.reset({
       meta_account_id: company?.meta_account_id,
       meta_token: company?.meta_token,
-      report_day_of_month: company?.report_day_of_month ? String(company?.report_day_of_month) : "",
       report_lookback_limit: company?.report_lookback_limit ? String(company?.report_lookback_limit) : "",
     })
   }, [company, form])
@@ -81,19 +81,15 @@ const EditReportsForm = (props: EditReportsFromProps) => {
               </DialogDescription>
             </DialogHeader>
             <div className="w-full h-fit flex flex-col gap-5">
-              <FormField
-                control={form.control}
-                name="report_day_of_month"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Dia do mês para envio de relatórios:</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="number" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="w-full h-fit flex flex-col gap-2">
+                <FormLabel>Dias do mês para envio de relatórios:</FormLabel>
+                <div className="w-full flex flex-wrap gap-2">
+                  {props.company?.report_days.map(reportDay => (
+                    <ReportMonthDayBadge key={reportDay.id} reportDay={reportDay} />
+                  ))}
+                  <CreateReportMonthDayForm />
+                </div>
+              </div>
               <FormField
                 control={form.control}
                 name="report_lookback_limit"
