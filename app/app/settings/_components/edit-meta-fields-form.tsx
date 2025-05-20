@@ -28,7 +28,6 @@ const EditMetaFieldsForm = (props: EditMetaFieldsFormProps) => {
     defaultValues: {
       meta_account_id: company?.meta_account_id,
       meta_token: company?.meta_token,
-      report_day_of_month: company?.report_day_of_month ? String(company?.report_day_of_month) : "",
       report_lookback_limit: company?.report_lookback_limit ? String(company?.report_lookback_limit) : "",
     }
   })
@@ -56,7 +55,6 @@ const EditMetaFieldsForm = (props: EditMetaFieldsFormProps) => {
     form.reset({
       meta_account_id: company?.meta_account_id,
       meta_token: company?.meta_token,
-      report_day_of_month: company?.report_day_of_month ? String(company?.report_day_of_month) : "",
       report_lookback_limit: company?.report_lookback_limit ? String(company?.report_lookback_limit) : "",
     })
   }, [company, form])
