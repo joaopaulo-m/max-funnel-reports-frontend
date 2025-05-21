@@ -9,6 +9,7 @@ interface UpdateClientProps {
   current_client_email: string
   name?: string
   email?: string
+  phone?: string
   meta_account_id?: string
 }
 
@@ -20,6 +21,7 @@ export async function updateClientAction(data: UpdateClientProps) {
       data: {
         name: data.name,
         email: data.email !== data.current_client_email ? data.email : undefined,
+        phone: data.phone?.replace(/\D/g, ''),
         meta_account_id: data.meta_account_id,
       }
     })

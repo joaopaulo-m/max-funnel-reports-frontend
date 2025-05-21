@@ -13,7 +13,7 @@ export async function createClientAction(data: CreateClientSchemaType) {
       data: {
         name: data.name,
         email: data.email,
-        phone: data.phone,
+        phone: data.phone.replace(/\D/g, ''),
         meta_account_id: data.meta_account_id,
       }
     })

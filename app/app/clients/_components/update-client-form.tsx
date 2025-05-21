@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { withMask } from 'use-mask-input'
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -15,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { updateClientSchema, type UpdateClientSchemaType } from "@/schemas/forms/update-client";
 import type { Client } from "@/types/client";
 import { updateClientAction } from "@/actions/client/update";
+import { formatPhoneNumber } from "@/utils/format-phone-number";
 
 interface UpdateClientFormProps {
   client: Client
@@ -28,6 +30,7 @@ const UpdateClientForm = (props: UpdateClientFormProps) => {
     defaultValues: {
       name: props.client.name,
       email: props.client.email,
+      phone: formatPhoneNumber(props.client.phone),
       meta_account_id: props.client.meta_account_id,
     }
   })
@@ -58,6 +61,7 @@ const UpdateClientForm = (props: UpdateClientFormProps) => {
     form.reset({
       name: props.client.name,
       email: props.client.email,
+      phone: formatPhoneNumber(props.client.phone),
       meta_account_id: props.client.meta_account_id,
     });
   }, [props.client, form]);  
@@ -98,6 +102,19 @@ const UpdateClientForm = (props: UpdateClientFormProps) => {
                     <FormLabel>E-mail:</FormLabel>
                     <FormControl>
                       <Input placeholder="seu@email.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Telefone:</FormLabel>
+                    <FormControl ref={withMask("+55 (99) 9 9999-9999")}>
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -13,6 +13,7 @@ import { updateClientReportsSettingsAction } from "@/actions/client-reports-sett
 import type { Client } from "@/types/client";
 import { DeleteClientAlertDialog } from "./delete-client-alert-dialog";
 import { UpdateClientForm } from "./update-client-form";
+import { formatPhoneNumber } from "@/utils/format-phone-number";
 
 interface ClientRowProps {
   client: Client
@@ -59,7 +60,7 @@ const ClientRow = (props: ClientRowProps) => {
     <TableRow key={client.id}>
       <TableCell className="font-medium">{client.name}</TableCell>
       <TableCell>{client.email}</TableCell>
-      <TableCell>{client.phone}</TableCell>
+      <TableCell>{formatPhoneNumber(client.phone)}</TableCell>
       <TableCell className="w-full flex justify-end items-center gap-8 text-right">
         <div className="flex items-center space-x-2">
           <Switch 

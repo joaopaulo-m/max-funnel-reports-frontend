@@ -8,20 +8,18 @@ import { LoaderCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 import type { Company } from "@/types/company";
 import { updateCompanySchema, type UpdateCompanySchemaType } from "@/schemas/forms/update-company";
 import { updateCompanyAction } from "@/actions/company/update";
-import { ReportMonthDayBadge } from "./report-month-day-badge";
-import { CreateReportMonthDayForm } from "./create-report-month-day-form";
 
-interface EditReportsFromProps {
+interface EditEvolutionFieldsFormProps {
   company?: Company
 }
 
-const EditReportsForm = (props: EditReportsFromProps) => {
+const EditEvolutionFieldsForm = (props: EditEvolutionFieldsFormProps) => {
   const { company } = props;
 
   const [open, setOpen] = useState(false)
@@ -31,6 +29,7 @@ const EditReportsForm = (props: EditReportsFromProps) => {
       meta_account_id: company?.meta_account_id,
       meta_token: company?.meta_token,
       report_lookback_limit: company?.report_lookback_limit ? String(company?.report_lookback_limit) : "",
+      evolution_instance: company?.evolution_instance,
     }
   })
   const { formState: { isSubmitting } } = form;
@@ -46,7 +45,7 @@ const EditReportsForm = (props: EditReportsFromProps) => {
         description: response.message
       })
     } else {
-      toast.success("Configurações atualizadas com sucesso")
+      toast.success("Dados meta atualizados com sucesso")
       setOpen(false)
     }
 
@@ -58,6 +57,7 @@ const EditReportsForm = (props: EditReportsFromProps) => {
       meta_account_id: company?.meta_account_id,
       meta_token: company?.meta_token,
       report_lookback_limit: company?.report_lookback_limit ? String(company?.report_lookback_limit) : "",
+      evolution_instance: company?.evolution_instance,
     })
   }, [company, form])
 
@@ -65,7 +65,7 @@ const EditReportsForm = (props: EditReportsFromProps) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="w-fit flex justify-start cursor-pointer" asChild>
         <Button className="bg-foreground/25 hover:bg-foreground/20 text-black font-medium">
-          Editar configurações
+          Editar dados
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -75,34 +75,22 @@ const EditReportsForm = (props: EditReportsFromProps) => {
             className="w-full flex flex-col gap-6"
           >
             <DialogHeader>
-              <DialogTitle className="font-bold">Editar configurações do relatório</DialogTitle>
+              <DialogTitle className="font-bold">Editar dados Evolution API</DialogTitle>
               <DialogDescription>
-                Defina o dia do mês para envio automático e o intervalo de dias que os dados devem cobrir.
+                Atualize o ID da sua instância para garantir que os relatórios sejam enviados corretamente.
               </DialogDescription>
             </DialogHeader>
             <div className="w-full h-fit flex flex-col gap-5">
-              <div className="w-full h-fit flex flex-col gap-2">
-                <FormLabel>Dias do mês para envio de relatórios:</FormLabel>
-                <div className="w-full flex flex-wrap gap-2">
-                  {props.company?.report_days.map(reportDay => (
-                    <ReportMonthDayBadge key={reportDay.id} reportDay={reportDay} />
-                  ))}
-                  <CreateReportMonthDayForm />
-                </div>
-              </div>
               <FormField
                 control={form.control}
-                name="report_lookback_limit"
+                name="evolution_instance"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Máximo de dias para coleta de dados:</FormLabel>
+                    <FormLabel>Instância:</FormLabel>
                     <FormControl>
-                      <Input {...field} type="number" />
+                      <Input {...field} type="text" />
                     </FormControl>
                     <FormMessage />
-                    <FormDescription>
-                      Por exemplo: buscar dados de no máximo ({company?.report_lookback_limit || 15}) dias atrás para envio do relatório
-                    </FormDescription>
                   </FormItem>
                 )}
               />
@@ -119,7 +107,7 @@ const EditReportsForm = (props: EditReportsFromProps) => {
                     <span className="text-sm font-semibold text-white">Enviando</span>
                   </div>
                   ) : (
-                    "Atualizar configurações"
+                    "Atualizar dados"
                   )
                 }
               </Button>
@@ -131,4 +119,4 @@ const EditReportsForm = (props: EditReportsFromProps) => {
   );
 }
 
-export { EditReportsForm };
+export { EditEvolutionFieldsForm };

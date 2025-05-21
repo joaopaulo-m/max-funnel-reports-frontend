@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { LoaderCircle, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
+import { withMask } from 'use-mask-input'
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -95,8 +96,8 @@ const CreateClientForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Telefone:</FormLabel>
-                    <FormControl>
-                      <Input placeholder="(99) 9 9999-9999" {...field} />
+                    <FormControl ref={withMask("+55 (99) 9 9999-9999")}>
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
